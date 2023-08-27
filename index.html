@@ -80,7 +80,7 @@
             },
         ];
 
-        var animalImage = document.querySelector(".animal-image");
+  var animalImage = document.querySelector(".animal-image");
         var animalName = document.querySelector(".animal-name");
         var animalDescription = document.querySelector(".animal-description");
         var animalCardContainer = document.getElementById("animalCardContainer");
@@ -91,33 +91,34 @@
             var spinnerContainer = document.querySelector(".spinner-container");
             var selectedAnimal = animals.find(animal => animal.key === key);
 
-            if (selectedAnimal) {
-                spinnerContainer.style.display = "block";
+            return new Promise((resolve, reject) => {
+                if (selectedAnimal) {
+                    spinnerContainer.style.display = "block";
+                    animalCardContainer.classList.remove("show");
 
-                animalCardContainer.classList.remove("show");
-
-                setTimeout(() => {
-                    spinnerContainer.style.display = "none";
-
-                    animalCardContainer.classList.add("show");
-                    animalImage.src = selectedAnimal.imageSource;
-                    animalName.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-                    animalDescription.textContent = selectedAnimal.description;
-                }, 3000);
-            } else {
-                animalCardContainer.classList.remove("show");
-            }
+                    setTimeout(() => {
+                        spinnerContainer.style.display = "none";
+                        animalCardContainer.classList.add("show");
+                        animalImage.src = selectedAnimal.imageSource;
+                        animalName.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+                        animalDescription.textContent = selectedAnimal.description;
+                        resolve();
+                    }, 3000);
+                } else {
+                    animalCardContainer.classList.remove("show");
+                    reject("Data tidak ada");
+                }
+            });
         };
 
         var handleSearch = () => {
             var searchValue = searchInput.value.toLowerCase();
             var validKeys = animals.map(animal => animal.key);
             
-            if (!validKeys.includes(searchValue)) {
-                alert("Data tidak ada");
-            } else {
-                updateAnimalInformation(searchValue);
-            }
+            updateAnimalInformation(searchValue)
+                .catch(error => {
+                    alert(error);
+                });
         };
 
         var catButton = document.getElementById("catButton");
