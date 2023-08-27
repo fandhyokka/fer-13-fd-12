@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+    <title>Animal Showing</title>
+    <style>
+        .card-container {
+            display: none;
+        }
+
+        .card-container.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container text-center mt-5">
+        <div class="row align-items-start">
+            <div class="col">
+                <button id="catButton" type="button" class="btn btn-success">Show Me Cat!</button>
+            </div>
+            <div class="col">
+                <button id="dogButton" type="button" class="btn btn-success">Show Me Dog!</button>
+            </div>
+            <div class="col">
+                <button id="chickButton" type="button" class="btn btn-success">Show Me Chick!</button>
+            </div>
+            <div class="col">
+                <button id="crowButton" type="button" class="btn btn-success">Show Me Crow!</button>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <input id="searchInput" type="text" class="form-control" placeholder="masukan kata kunci"
+                aria-label="Recipient's username" aria-describedby="button-addon2" />
+            <button id="searchButton" class="btn btn-outline-secondary" type="button">Search</button>
+        </div>
+    </div>
+
+    <div id="animalCardContainer" class="container card card-container">
+        <div class="spinner-container">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div id="catCard" class="card" style="width: 18rem">
+            <img class="animal-image"></img>
+            <h3 class="animal-name">Animal </h3>
+            <p class="animal-description">Description</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script>
+        var animals = [
+            {
+                key: "cat",
+                imageSource: "./assets/undraw_cat.svg",
+                description:
+                    "The cat is a domestic species of small carnivorous mammal. It is the only domesticated species in the family Felidae and is commonly referred to as the domestic cat or house cat to distinguish it from the wild members of the family.",
+            },
+            {
+                key: "dog",
+                imageSource: "./assets/undraw_dog.svg",
+                description:
+                    "The dog is a domesticated descendant of the wolf. Also called the domestic dog, it is derived from extinct Pleistocene wolves, and the modern wolf is the dog's nearest living relative. Dogs were the first species to be domesticated by hunter-gatherers over 15,000 years ago before the development of agriculture.",
+            },
+            {
+                key: "chick",
+                imageSource: "./assets/undraw_chick.svg",
+                description: "Chick (young bird), a bird that has not yet reached adulthood.",
+            },
+        ];
+
+        var animalImage = document.querySelector(".animal-image");
+        var animalName = document.querySelector(".animal-name");
+        var animalDescription = document.querySelector(".animal-description");
+        var animalCardContainer = document.getElementById("animalCardContainer");
+        var searchInput = document.getElementById("searchInput");
+        var searchButton = document.getElementById("searchButton");
+
+        var updateAnimalInformation = (key) => {
+            var spinnerContainer = document.querySelector(".spinner-container");
+            var selectedAnimal = animals.find(animal => animal.key === key);
+
+            if (selectedAnimal) {
+                spinnerContainer.style.display = "block";
+
+                animalCardContainer.classList.remove("show");
+
+                setTimeout(() => {
+                    spinnerContainer.style.display = "none";
+
+                    animalCardContainer.classList.add("show");
+                    animalImage.src = selectedAnimal.imageSource;
+                    animalName.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+                    animalDescription.textContent = selectedAnimal.description;
+                }, 3000);
+            } else {
+                animalCardContainer.classList.remove("show");
+            }
+        };
+
+        var handleSearch = () => {
+            var searchValue = searchInput.value.toLowerCase();
+            var validKeys = animals.map(animal => animal.key);
+            
+            if (!validKeys.includes(searchValue)) {
+                alert("Data tidak ada");
+            } else {
+                updateAnimalInformation(searchValue);
+            }
+        };
+
+        var catButton = document.getElementById("catButton");
+        var dogButton = document.getElementById("dogButton");
+        var chickButton = document.getElementById("chickButton");
+        var crowButton = document.getElementById("crowButton");
+
+        catButton.addEventListener("click", () => updateAnimalInformation("cat"));
+        dogButton.addEventListener("click", () => updateAnimalInformation("dog"));
+        chickButton.addEventListener("click", () => updateAnimalInformation("chick"));
+        crowButton.addEventListener("click", () => updateAnimalInformation("crow"));
+
+        searchButton.addEventListener("click", handleSearch);
+    </script>
+</body>
+
+</html>
